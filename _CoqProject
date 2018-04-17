@@ -1,4 +1,4 @@
--R src/ Lib
+-R src/ AV
 
 # compcert
 src/Axioms.v
