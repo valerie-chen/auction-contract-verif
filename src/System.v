@@ -38,11 +38,11 @@ Inductive step : WorldState -> WorldState -> Prop :=
     step () (ast, tm, nil) *)
 | bid_step : forall ast bdr amt tm log ast' tm',
     Auction.bid ast bdr amt tm' = Some(ast') ->
-    tm' >= tm ->
+    tm' > tm ->
     step (ast, tm, log) (ast', tm', (bdr, amt) :: log)
 | end_step : forall ast tm log ast' tm',
     Auction.sigEnd ast tm' = Some(ast') ->
-    tm' >= tm ->
+    tm' > tm ->
     step (ast, tm, log) (ast', tm', log).
 
 Inductive multistep : WorldState -> WorldState -> Prop :=
@@ -132,7 +132,7 @@ Proof.
  
 Lemma geq_trans : forall p q r,
   p < q ->
-    p >= r ->
+    p > r ->
       r < q.
 Proof.
   intros. Admitted.
@@ -197,8 +197,7 @@ Proof.
         destruct (false || Auction.ended s) eqn:Hb. discriminate H.
         unfold auction_did_end. apply le_false_to_prop in Heq. apply ineq_reverse in Heq.
           apply geq_trans with (p := tm') (q := Auction.auctionStart s + Auction.biddingTime s) (r := tm) in H2.
-          apply lt_prop_to_flip in H2. rewrite H2. omega. Abort.
-
+          apply lt_prop_to_flip in H2. rewrite H2. omega. inversion H. Abort.
 
 Lemma not_end_if_bid : forall ast bdr amt tm w ast' tm' log,
   Auction.bid ast bdr amt tm = Some ast' ->
