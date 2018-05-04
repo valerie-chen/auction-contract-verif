@@ -197,7 +197,7 @@ Proof.
         destruct (false || Auction.ended s) eqn:Hb. discriminate H.
         unfold auction_did_end. apply le_false_to_prop in Heq. apply ineq_reverse in Heq.
           apply geq_trans with (p := tm') (q := Auction.auctionStart s + Auction.biddingTime s) (r := tm) in H2.
-          apply lt_prop_to_flip in H2. rewrite H2. omega. Abort.
+          apply lt_prop_to_flip in H2. rewrite H2. omega. 
 
 
 Lemma not_end_if_bid : forall ast bdr amt tm w ast' tm' log,
@@ -278,6 +278,14 @@ Proof.
             unfold auction_did_end in H0. destruct ast'. contradiction H0. 
             destruct (Auction.auctionStart s0 + Auction.biddingTime s0 <=? tm'). 
 Abort. 
+(* simpl. rewrite H11.
+              contradiction H7.
+            apply step_length_inc_one with (w := (ast, tm, log)) (w' := (a, t, lg)) in H5. inversion H2. 
+ apply add_list_same_nil.
+ *)(* induction H. inversion H1; inversion H2. rewrite <- H7. *)
+(* inversion H1; inversion H2.  *)
+  (* inversion H1; inversion H2. rewrite <- H7. auto. subst. *)
+    
 
 Definition is_progress_bid (lg lg' : ContractLog) : Prop :=
   let pre := Contract.highestBidder lg in
@@ -304,7 +312,6 @@ Proof.
           destruct ((Auction.pendingReturns s) ! bdr).
             unfold is_progress_bid. destruct (Contract.highestBidder lg). 
             destruct (Contract.highestBidder lg').
-Abort.
 
 Theorem winner_is_hi_bidder_step_init : forall w w',
   step w w' ->
@@ -316,6 +323,8 @@ Theorem winner_is_hi_bidder_step_init : forall w w',
 Proof.
   intros. unfold Auction.getWinner in H3. destruct ast'. rewrite <- H3.
     unfold Contract.highestBidder. destruct lg'. reflexivity.
+    unfold Contract.highestBidder_0. reflexivity.
+    
     unfold Contract.highestBidder_0.
 Abort.
 
@@ -328,16 +337,50 @@ Theorem winner_is_hi_bidder_step : forall w w',
     Contract.highestBidder lg' = p.
 Proof.
   intros. unfold Auction.getWinner in H3. destruct a'. rewrite <- H3.
-    unfold Contract.highestBidder. unfold Contract.highestBidder_0.
-Abort.
+    unfold Contract.highestBidder. unfold Contract.highestBidder_0. 
+      destruct (highestBidder_0).
 
-Theorem winner_is_hi_bidder_mlt : forall w w',
-  multistep w w' ->
-  forall a t lg a' t' lg' p, w = (a, t, lg) ->
-    ~(lg' = nil) ->
-    w' = (a',t',lg') ->
-    Auction.getWinner a' = p ->
-    Contract.highestBidder lg' = p.
+Theorem winner_is_hi_bidder_mlt : forall bn aus bt t ast' t' lg' p,
+  multistep (init_ws bn aus bt t) w' ->
+  forall ast t' lg', w' = (ast',t',lg') ->
+  Contract.highestBidder lg' = p ->
+  Auction.getWinner ast' = p.
 Proof.
-  intros. 
+  intros. replace p. destruct left.
+
+(* Theorem winner_is_highest_bidder : forall p bn aus bt t ast' t' lg',
+  multistep (init_ws bn aus bt t) (ast' t' lg') ->
+  Auction.getWinner ast' = p ->
+  Contract.highestBidder lg' = p. *)
+
+
+
+(* Definition emptyws : ANState := (Auction.Build_State 1
+                        1
+                        1
+                        None
+                        None
+                        false
+                        (PTree.empty positive)).
+Definition state1 := Auction.init 1 1 1.
+Definition state2 := Auction.init 2 1 2.
+Definition ws0 : WorldState := (state1, 2, nil). *)
+(* (*   match state1 with
+  | Some(s1) => (s1, 2, nil)
+  | None => (emptyws :: nil : ANStateList, 2, nil)
+  end. *)
+Definition ws1 : WorldState := 
+  match state2 with
+  | Some(s2) => (s2, 3, nil)
+  | None => (emptyws :: nil, 3, nil)
+  end.
+Definition f : Prop := step ws0 ws1.
+Compute f. *)
+
+(* Theorem t1 : 
+  forall (hist : ANStateList) (newBidder newBid now: positive),
+    valid_hist (add_bid hist newBidder newBid now).
+Proof.
+  intros. induction hist as [| nil hist'].
 Abort.
+ *)
