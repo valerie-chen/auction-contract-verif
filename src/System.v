@@ -329,8 +329,8 @@ Abort.
 Theorem winner_is_hi_bidder_step_init : forall w w',
   step w w' ->
   forall bn aus bt t ast' t' lg' p, w = (init_ws bn aus bt t) ->
-    ~(lg' = nil) ->
     w' = (ast',t',lg') ->
+    ~(lg' = nil) ->
     Auction.getWinner ast' = p ->
     Contract.highestBidder lg' = p.
 Proof.
@@ -342,8 +342,8 @@ Abort.
 Theorem winner_is_hi_bidder_mlt_init : forall w w',
   multistep w w' ->
   forall bn aus bt t ast' t' lg' p, w = (init_ws bn aus bt t) ->
-    ~(lg' = nil) ->
     w' = (ast',t',lg') ->
+    ~(lg' = nil) ->
     Auction.getWinner ast' = p ->
     Contract.highestBidder lg' = p.
 Proof.
