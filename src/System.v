@@ -13,18 +13,15 @@ Open Scope list_scope.
 
 (* Redefine from other modules for readability. *)
 
-Definition ANState := Auction.State.
+(* Definition ANState := Auction.State.
 Definition ANStateList := Auction.StateList.
 
-(* Definition init_auction := Auction.init.
-Definition add_bid := Auction.bid. *)
-
 Definition ContractTime := Contract.Time.
-Definition ContractLog := Contract.BidLog.
+Definition ContractLog := Contract.BidLog. *)
 
 (* world states *)
 
-Definition WorldState := (ANStateList * ContractTime * ContractLog)%type.
+Definition WorldState := (Auction.StateList * Contract.Time * Contract.BidLog)%type.
 Definition WorldStateList := list WorldState.
 
 Definition init_ws (beneficiary auctionStart biddingTime time : positive) : WorldState :=
@@ -216,7 +213,7 @@ Proof.
 (*  apply ab with (b := Auction.getEnded ast'). *)
 Abort.
 
-Lemma add_list_same_nil : forall (x : Contract.BidEntry) (lst : ContractLog),
+Lemma add_list_same_nil : forall (x : Contract.BidEntry) (lst : Contract.BidLog),
   lst = x :: lst -> False.
 Proof.
    induction lst.
@@ -279,7 +276,7 @@ Proof.
             destruct (Auction.auctionStart s0 + Auction.biddingTime s0 <=? tm'). 
 Abort. 
 
-Definition is_progress_bid (lg lg' : ContractLog) : Prop :=
+Definition is_progress_bid (lg lg' : Contract.BidLog) : Prop :=
   let pre := Contract.highestBidder lg in
   let post := Contract.highestBidder lg' in
     match pre with

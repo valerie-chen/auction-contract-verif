@@ -14,8 +14,6 @@ Definition amount := positive.
 Definition BidEntry := (address * amount)%type.
 Definition BidLog := list (BidEntry).
 
-(* Lemma hi_bid_
- *)
 Fixpoint highestBidder_0 (log : BidLog) (bdr bid : positive) : positive :=
   match log with
   | nil => bdr
