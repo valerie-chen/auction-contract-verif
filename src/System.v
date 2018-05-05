@@ -1,5 +1,6 @@
 Require Import AV.Auction.
 Require Import AV.Contract.
+Require Import AV.Coqlib.
 Require Import AV.Maps.
 
 Require Import Bool.
