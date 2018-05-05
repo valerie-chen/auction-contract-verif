@@ -1,0 +1,3 @@
+[submodule "source-contract"]
+	path = source-contract
+	url = https://gist.github.com/bneiluj/75c6aba659518ad30cc8b8718a1ef88c
