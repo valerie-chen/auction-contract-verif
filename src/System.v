@@ -303,19 +303,6 @@ Proof.
             destruct (Contract.highestBidder lg').
 Abort.
 
-Theorem winner_is_hi_bidder_step_init : forall w w',
-  step w w' ->
-  forall bn aus bt t ast' t' lg' p, w = (init_ws bn aus bt t) ->
-    ~(lg' = nil) ->
-    w' = (ast',t',lg') ->
-    Auction.getWinner ast' = p ->
-    Contract.highestBidder lg' = p.
-Proof.
-  intros. unfold Auction.getWinner in H3. destruct ast'. rewrite <- H3.
-    unfold Contract.highestBidder. destruct lg'. reflexivity.
-    unfold Contract.highestBidder_0.
-Abort.
-
 Theorem winner_is_hi_bidder_step : forall w w',
   step w w' ->
   forall a t lg a' t' lg' p, w = (a, t, lg) ->
@@ -337,4 +324,30 @@ Theorem winner_is_hi_bidder_mlt : forall w w',
     Contract.highestBidder lg' = p.
 Proof.
   intros. 
+Abort.
+
+Theorem winner_is_hi_bidder_step_init : forall w w',
+  step w w' ->
+  forall bn aus bt t ast' t' lg' p, w = (init_ws bn aus bt t) ->
+    ~(lg' = nil) ->
+    w' = (ast',t',lg') ->
+    Auction.getWinner ast' = p ->
+    Contract.highestBidder lg' = p.
+Proof.
+  intros. unfold Auction.getWinner in H3. destruct ast'. rewrite <- H3.
+    unfold Contract.highestBidder. destruct lg'. reflexivity.
+    unfold Contract.highestBidder_0.
+Abort.
+
+Theorem winner_is_hi_bidder_mlt_init : forall w w',
+  multistep w w' ->
+  forall bn aus bt t ast' t' lg' p, w = (init_ws bn aus bt t) ->
+    ~(lg' = nil) ->
+    w' = (ast',t',lg') ->
+    Auction.getWinner ast' = p ->
+    Contract.highestBidder lg' = p.
+Proof.
+  intros. unfold Auction.getWinner in H3. destruct ast'. rewrite <- H3.
+    unfold Contract.highestBidder. destruct lg'. reflexivity.
+    unfold Contract.highestBidder_0.
 Abort.
