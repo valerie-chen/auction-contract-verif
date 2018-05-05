@@ -63,7 +63,7 @@ Proof.
   - rewrite <- H0. rewrite <- H1. assumption. Qed.
 
 (* Simple implementation. Terms may change in the future. *)
-Definition valid_hist (hist : option ANStateList) : Prop := 
+Definition valid_hist (hist : option Auction.StateList) : Prop := 
   match hist with
   | Some(_) => True
   | None => False
